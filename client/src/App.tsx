@@ -46,8 +46,8 @@ import QueryOrder from "./pages/admin/order/queryOrder";
 import ConfirmRefundOrder from "./pages/admin/order/ConfirmRefundOrder";
 import AdminProfile from "./components/Admin/AdminProfile.tsx";
 import OrderForm from "./pages/admin/order/OrderForm.tsx";
-import { Bounce, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ListCustomer from "./pages/admin/customer/ListCustomer.tsx";
 import CancelOrder from "./pages/admin/order/CancelOrder.tsx";
 import DetailCategory from "./pages/admin/category/DetailCategory.tsx";
@@ -56,12 +56,14 @@ import { setReload } from "./redux/slices/Reload.ts";
 import OrderDetail from "./pages/client/Order/OrderDetail.tsx";
 
 const App = () => {
-  const dispatch = useDispatch()
-  const user = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : undefined
+  const dispatch = useDispatch();
+  const user = sessionStorage.getItem("user")
+    ? JSON.parse(sessionStorage.getItem("user"))
+    : undefined;
 
-  const { data } = useGetCartByUserId({ userId: user?._id })
+  const { data } = useGetCartByUserId({ userId: user?._id });
   useEffect(() => {
-    dispatch(setCartQuantity(data?.data?.carts?.length || 0))
+    dispatch(setCartQuantity(data?.data?.carts?.length || 0));
   }, [data]);
 
   return (
@@ -87,37 +89,53 @@ const App = () => {
 
             {/*order */}
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
-            <Route path="/order-orderPaymentDelivery" element={<OrderPaymentDelivery />} />
+            <Route
+              path="/order-orderPaymentDelivery"
+              element={<OrderPaymentDelivery />}
+            />
             <Route path="/order-history" element={<OrderHistory />} />
-            <Route path="/order-history/orderdetail/:id" element={<OrderDetail />} />
+            <Route
+              path="/order-history/orderdetail/:id"
+              element={<OrderDetail />}
+            />
 
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/forgot" element={<Forgot />} />
             <Route path="/changePassword" element={<ChangePass />} />
-
           </Route>
 
-          <Route path="admin" element={
-            // Đường dẫn bắt đầu bằng '/admin' chỉ cho phép truy cập nếu quyền là 'admin' hoặc 'nhanvien'
-            <PrivateRoute isAllowed={() => isUserAllowed(user, ['admin', 'nhanvien'])}>
-              <AdminLayout />
-            </PrivateRoute>
-            // <AdminLayout />
-          }>
+          <Route
+            path="admin"
+            element={
+              // Đường dẫn bắt đầu bằng '/admin' chỉ cho phép truy cập nếu quyền là 'admin' hoặc 'nhanvien'
+              <PrivateRoute
+                isAllowed={() => isUserAllowed(user, ["admin", "nhanvien"])}
+              >
+                <AdminLayout />
+              </PrivateRoute>
+              // <AdminLayout />
+            }
+          >
             <Route index element={<Dashboard />} />
 
             {/* admin products */}
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/products" element={<ListProduct />} />
             <Route path="/admin/products/add" element={<ProductForm />} />
-            <Route path="/admin/products/update/:id" element={<ProductForm />} />
+            <Route
+              path="/admin/products/update/:id"
+              element={<ProductForm />}
+            />
 
             {/* admin category */}
             <Route path="/admin/category" element={<ListCategory />} />
             <Route path="/admin/category/:id" element={<DetailCategory />} />
             <Route path="/admin/category/add" element={<CategoryForm />} />
-            <Route path="/admin/category/update/:id" element={<CategoryForm />} />
+            <Route
+              path="/admin/category/update/:id"
+              element={<CategoryForm />}
+            />
 
             {/* admin user */}
             <Route path="/admin/users" element={<ListUsers />} />
@@ -145,7 +163,10 @@ const App = () => {
             <Route path="/admin/refundOrder" element={<RefundOrder />} />
             <Route path="/admin/cancelOrder" element={<CancelOrder />} />
             <Route path="/admin/queryOrder" element={<QueryOrder />} />
-            <Route path="/admin/confirmOrder" element={<ConfirmRefundOrder />} />
+            <Route
+              path="/admin/confirmOrder"
+              element={<ConfirmRefundOrder />}
+            />
 
             <Route path="/admin/settings" element={<Settings />} />
             <Route path="/admin/access" element={<Access />} />
@@ -172,10 +193,10 @@ const App = () => {
         draggable
         pauseOnHover
         theme="light"
-      // transition: Bounce
+        // transition: Bounce
       />
     </>
   );
-}
+};
 
 export default App;

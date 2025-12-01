@@ -19,13 +19,13 @@ import {
   soldProductRouter,
   refundRouter,
   notificationRouter,
-  userAddressRouter
+  userAddressRouter,
 } from "./routers/index.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const port = process.env.PORT || "3001";
+const port = Number(process.env.PORT) || 3001;
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -50,7 +50,20 @@ app.use("/refundHistory", refundRouter);
 app.use("/notification", notificationRouter);
 app.use("/userAddress", userAddressRouter);
 
-app.listen(7000, async () => {
-  await connect();
-  console.log(`Example app listening on port 7000`);
+// Health check endpoint for client to verify server is up
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: Date.now() });
 });
+
+// Start server only after DB is connected to avoid Mongoose buffering timeouts
+(async () => {
+  try {
+    await connect();
+    app.listen(port, () => {
+      console.log(`Example app listening on port http://localhost:${port}`);
+    });
+  } catch (e) {
+    console.error("Server not started due to DB connection error.");
+    process.exit(1);
+  }
+})();

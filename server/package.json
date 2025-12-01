@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon ./src/app.js",
-    "debug": "node inspect app.js"
+    "debug": "node inspect app.js",
+    "seed": "node ./src/scripts/seed.js"
   },
   "author": "",
   "license": "ISC",

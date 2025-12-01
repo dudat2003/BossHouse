@@ -14,13 +14,15 @@ const SignUp = () => {
   const { mutate: signUp } = useSignUp();
   const { mutate: signIn } = useSignIn();
   const { mutate: signIn1 } = useSignIn1();
-  const user = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')) : undefined
-  const next = useNavigate()
-  
+  const user = sessionStorage.getItem("user")
+    ? JSON.parse(sessionStorage.getItem("user"))
+    : undefined;
+  const next = useNavigate();
+
   useEffect(() => {
     if (user) {
-      next('/')
-      toast("Bạn đã đăng nhập vui lòng đăng xuất?")
+      next("/");
+      toast("Bạn đã đăng nhập vui lòng đăng xuất?");
     }
   }, []);
 
@@ -41,8 +43,12 @@ const SignUp = () => {
       <div className="py-6">
         <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
           <div className="w-full p-8 lg:w-1/2">
-          <h2 className="text-2xl font-bold  text-center xl:block hidden">BossHouse</h2>
-            <h2 className="text-2xl font-bold  text-center xl:hidden block ">Đăng ký</h2>
+            <h2 className="text-2xl font-bold  text-center xl:block hidden">
+              BossHouse
+            </h2>
+            <h2 className="text-2xl font-bold  text-center xl:hidden block ">
+              Đăng ký
+            </h2>
             <div className=" my-3 flex justify-center items-center">
               <GoogleLogin
                 onSuccess={(credentialResponse) => {

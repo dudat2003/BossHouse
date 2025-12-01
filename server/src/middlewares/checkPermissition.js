@@ -9,7 +9,7 @@ import { role } from "../models/index.js";
 //       throw new Error("Token not found!");
 //     }
 
-//     const decoded = jwt.verify(token, process.env.TOKEN);
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
 //     const roleId = decoded.findUser.roleId;
 //     const roleModal = await role.findOne({ _id: roleId });
@@ -36,7 +36,7 @@ export const checkPermission = (require) => {
         throw new Error("Token not found!");
       }
 
-      const decoded = jwt.verify(token, process.env.TOKEN);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       const roleId = decoded.findUser.roleId;
       const roleModal = await role.findOne({ _id: roleId });
@@ -51,5 +51,5 @@ export const checkPermission = (require) => {
         message: error.message,
       });
     }
-  }
-}
+  };
+};

@@ -9,7 +9,7 @@ const signup = async (req, res) => {
     const { error } = userSignup.validate(req.body);
     if (error) {
       return res.status(404).json({
-        messages: error.message
+        messages: error.message,
       });
     }
 
@@ -28,7 +28,7 @@ const signup = async (req, res) => {
 
     if (!data) {
       return res.status(404).json({
-        messages: "Đăng ký thất bại!"
+        messages: "Đăng ký thất bại!",
       });
     }
 
@@ -37,12 +37,12 @@ const signup = async (req, res) => {
       data: {
         ...req.body,
         password: undefined,
-        confirmPassword: undefined
-      }
+        confirmPassword: undefined,
+      },
     });
   } catch (error) {
     return res.status(404).json({
-      messages: error.message
+      messages: error.message,
     });
   }
 };
@@ -52,14 +52,14 @@ const signin = async (req, res) => {
     const { error } = userSignin.validate(req.body);
     if (error) {
       return res.status(404).json({
-        messages: error.message
+        messages: error.message,
       });
     }
 
     const findUser = await user.findOne({ email: req.body.email });
     if (!findUser) {
       return res.status(404).json({
-        messages: "Tài khoản không tồn tại!"
+        messages: "Tài khoản không tồn tại!",
       });
     }
 
@@ -69,12 +69,18 @@ const signin = async (req, res) => {
     );
     if (!checkPassword) {
       return res.status(404).json({
-        messages: "Mật khẩu không chính xác!"
+        messages: "Mật khẩu không chính xác!",
       });
     }
 
-    const token = await jwt.sign({ findUser }, process.env.TOKEN, {
-      expiresIn: "7d"
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      return res.status(500).json({
+        messages: "JWT secret is not configured (set JWT_SECRET in .env)",
+      });
+    }
+    const token = await jwt.sign({ findUser }, secret, {
+      expiresIn: "7d",
     });
 
     // findUser.password = undefined;
@@ -82,11 +88,11 @@ const signin = async (req, res) => {
     return res.status(200).json({
       messages: "Đăng nhập thành công!",
       findUser,
-      token
+      token,
     });
   } catch (error) {
     return res.status(404).json({
-      messages: error.message
+      messages: error.message,
     });
   }
 };
@@ -113,14 +119,14 @@ const getAll = async (req, res) => {
 
     if (!data || data.length === 0) {
       return res.status(404).json({
-        message: "Không tìm thấy danh sách user!"
+        message: "Không tìm thấy danh sách user!",
       });
     }
 
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -131,14 +137,14 @@ const getAllNoPaginate = async (req, res) => {
 
     if (!data || data.length === 0) {
       return res.status(404).json({
-        message: "Không tìm thấy danh sách user!"
+        message: "Không tìm thấy danh sách user!",
       });
     }
 
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -185,7 +191,7 @@ const updateUser = async (req, res) => {
 
     if (error) {
       return res.status(400).json({
-        message: error.details[0].message
+        message: error.details[0].message,
       });
     } else {
       if (body.password) {
@@ -194,23 +200,23 @@ const updateUser = async (req, res) => {
       }
 
       const data = await user.findByIdAndUpdate(req.params.id, body, {
-        new: true
+        new: true,
       });
 
       if (!data) {
         return res.status(404).json({
-          message: "Cập nhật user thất bại!"
+          message: "Cập nhật user thất bại!",
         });
       }
 
       return res.status(200).json({
         updated: true,
-        data
+        data,
       });
     }
   } catch (error) {
     return res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -245,8 +251,8 @@ const fogotPassword = async (req, res) => {
         secure: true,
         auth: {
           user: "fptkiki@gmail.com",
-          pass: "xwyedsdaifdkewsy"
-        }
+          pass: "xwyedsdaifdkewsy",
+        },
       });
       const info = await tranfoted.sendMail({
         from: '"BossHouse Shop" <fptkiki@gmail.com>',
@@ -257,7 +263,7 @@ const fogotPassword = async (req, res) => {
             <p>Vui lòng giữ thông tin này riêng tư và không chia sẻ với người khác.</p>
             <p>Để bảo mật tài khoản. Hãy đổi mật khẩu ngay sau khi đăng nhập thành công.<p/>
             <p>Trân trọng!<p/>
-          `
+          `,
       });
       return res.status(200).json(info);
     }
@@ -310,4 +316,15 @@ const deleteManyUser = async (req, res) => {
   }
 };
 
-export default { signup, signin, getAll, getOne, updateUser, deleteUser, deleteManyUser, fogotPassword, getByEmail, getAllNoPaginate };
+export default {
+  signup,
+  signin,
+  getAll,
+  getOne,
+  updateUser,
+  deleteUser,
+  deleteManyUser,
+  fogotPassword,
+  getByEmail,
+  getAllNoPaginate,
+};
