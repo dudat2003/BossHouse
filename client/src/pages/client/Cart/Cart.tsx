@@ -502,7 +502,17 @@ const Cart = () => {
 
                                                     <div className=" xl:w-[60%] w-full flex  xl:text-base text-sm">
                                                         {item && item.product && item.product.images && item.product.images.length > 0 ? (
-                                                            <img src={item.product.images[0].response.urls[0]} alt="img" className="xl:w-[28%] xl:h-[100%] w-20" />
+                                                            <img
+                                                                src={
+                                                                    typeof item?.product?.images?.[0] === 'string'
+                                                                        ? (item?.product?.images?.[0] as any)
+                                                                        : (item?.product?.images?.[0]?.response?.urls?.[0]
+                                                                            || item?.product?.images?.[0]?.url
+                                                                            || item?.product?.images?.[0]?.secure_url)
+                                                                }
+                                                                alt="img"
+                                                                className="xl:w-[28%] xl:h-[100%] w-20"
+                                                            />
                                                         ) : (
                                                             <img src='https://thcsgiangvo-hn.edu.vn/wp-content/uploads/2023/09/anh-loading-1.jpg' alt="default-img" className="xl:w-[28%] xl:h-[100%] w-20" />
                                                         )}
@@ -513,8 +523,8 @@ const Cart = () => {
                                                         <div className="flex  justify-between  w-full xl:hidden">
                                                             <div className=" w-[45%]">
                                                                 <div className="text-left ml-3 xl:hidden block"> {item?.product?.name} </div>
-                                                                <div className="text-left ml-3 xl:hidden block "> {item?.product?.sizes[0]?.size}</div>
-                                                                <div className="text-left ml-3 xl:hidden block  text-[red] font-medium"> {formatCurrency(item?.product?.sizes[0]?.price)} </div>
+                                                                <div className="text-left ml-3 xl:hidden block "> {item?.selectedSize}</div>
+                                                                <div className="text-left ml-3 xl:hidden block  text-[red] font-medium"> {formatCurrency(item?.product?.sizes?.find(s => s.size == item?.selectedSize)?.price)} </div>
                                                             </div>
                                                             <div className=" w-[40%]">
                                                                 <div className=" xl:hidden block">
@@ -809,7 +819,17 @@ const Cart = () => {
             <Modal title="Chọn lại size" open={isModalChooseSize} onOk={handleOk} onCancel={handleCancel}>
                 <div className="p-6">
                     <div className="flex items-center mb-6">
-                        <img src={itemChooseSize?.product?.images[0].response.urls[0]} alt="Product" className="w-24 h-24 mr-6 object-cover rounded-md shadow-md" />
+                        <img
+                            src={
+                                typeof itemChooseSize?.product?.images?.[0] === 'string'
+                                    ? (itemChooseSize?.product?.images?.[0] as any)
+                                    : (itemChooseSize?.product?.images?.[0]?.response?.urls?.[0]
+                                        || itemChooseSize?.product?.images?.[0]?.url
+                                        || itemChooseSize?.product?.images?.[0]?.secure_url)
+                            }
+                            alt="Product"
+                            className="w-24 h-24 mr-6 object-cover rounded-md shadow-md"
+                        />
                         <div>
                             <p className="text-lg font-semibold text-gray-800">{itemChooseSize?.product?.name}</p>
                             <p className="text-sm text-gray-600">{itemChooseSize?.product?.description}</p>
